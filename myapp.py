@@ -31,8 +31,8 @@ conf = {
 }
 
 if __name__ == "__main__":
-	cherrypy.tree.mount(Root(), '/')
-	cherrypy.tree.mount(SearchGenerator(), '/generate')
+	cherrypy.tree.mount(Root(), '/', conf)
+	cherrypy.tree.mount(SearchGenerator(), '/generate', conf)
 	cherrypy.tree.mount(Upload(), '/upload', conf)
 	cherrypy.engine.start()
 	cherrypy.engine.block()
