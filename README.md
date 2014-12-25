@@ -1,7 +1,6 @@
 Intro
 =====
 Searchme is a basic searching webapp using CherryPy framework and Xapian search engine.
-
 Requirements
 ============
 
@@ -35,7 +34,7 @@ Get Started
 
 `$ python server.py`
 
-* Go to http://localhost:8080 and try doing something
+* Go to [http://localhost:8080](http://localhost:8080) and try doing something
 
 Storing the files
 =================
