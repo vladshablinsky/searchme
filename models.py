@@ -19,14 +19,14 @@ class UploadModel:
         with open(filepath + filename, "w") as fileout:
             fileout.write(contents)
 
-        #Indexing new file
+        # Indexing new file
         db = xapian.WritableDatabase(dbpath, xapian.DB_CREATE_OR_OPEN)
         indexer = xapian.TermGenerator()
         stemmer = xapian.Stem("english")
         indexer.set_stemmer(stemmer)
         doc = xapian.Document()
         doc.set_data(contents)
-        doc.add_value(0, filename)
+        doc.add_value(0, filepath + filename)
         indexer.set_document(doc)
         indexer.index_text(contents)
 

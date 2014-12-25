@@ -1,6 +1,6 @@
 import cherrypy
 import os
-from controllers import Root, Upload, SearchGenerator
+from controllers import Root, Upload, SearchGenerator, Download
 
 
 def get_app_config():
@@ -18,11 +18,11 @@ def get_app_config():
 
 def get_app(config=None):
     config = config or get_app_config()
-    print config
-    cherrypy.tree.mount(Root(), '/', config=config)
-    cherrypy.tree.mount(Upload(), '/upload', config=config)
-    cherrypy.tree.mount(SearchGenerator(), '/generate', config=config)
-    return cherrypy.tree
+    root = Root()
+    root.download = Download()
+    cherrypy.tree.mount(root, '/', config="config/webapp.cfg")
+    cherrypy.tree.mount(Upload(), '/upload', config="config/webapp.cfg")
+    cherrypy.tree.mount(SearchGenerator(), '/generate', config="config/webapp.cfg")
 
 
 def start():

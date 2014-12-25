@@ -1,4 +1,7 @@
+import glob
+import os.path
 import xapian
+import cherrypy
 
 
 class MainView:
@@ -18,11 +21,13 @@ class MainView:
         return filename + " was successfully added"
 
     def get_search_results(self, matches):
-        results = ""
-        results += str(matches.size()) + " results found" + "<br>"
+        html = ""
+        html += str(matches.size()) + " results found" + "<br>"
         for m in matches:
-            results += "%i: %i%% docid=%i + %s\n" % (m.rank + 1, m.percent, m.docid, m.document.get_data()) + "<br><br><br>"
-        return results
+            html += "%i: %i%% docid=%i + %s\n" % (m.rank + 1, m.percent, m.docid, m.document.get_data()) + "<br>"
+            absPath = os.path.abspath(m.document.get_value(0))
+            html += '<a href="/download/?filepath=' + absPath + '">' + "Get file" + "</a><br/>"
+        return html
 
     def get_all_querries(self):
         myfile = open("searchlog.txt", "r")

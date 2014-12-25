@@ -1,6 +1,7 @@
 import cherrypy
 from views import MainView
 from models import SearchModel, UploadModel
+from cherrypy.lib.static import serve_file
 
 
 class Root(object):
@@ -25,3 +26,9 @@ class Upload(object):
         mv = MainView()
         filename = um.upload_file(myFile)
         return mv.get_file_added(filename)
+
+
+class Download(object):
+    @cherrypy.expose
+    def index(self, filepath):
+        return serve_file(filepath, "application/x-download", "attachment")
