@@ -12,6 +12,7 @@ class UploadModel:
     def upload_file(self, myfile, dbpath="db"):
 
         contents = myfile.file.read()
+        contents.decode('utf-8', 'ignore')
         filename = hashlib.md5(contents).hexdigest() + ".txt"
         filepath = "lib/" + filename[:2] + "/" + filename[2:4] + "/"
         if not os.path.exists(os.path.dirname(filepath + filename)):
@@ -47,23 +48,26 @@ class SearchModel:
             myfile.write(query_string + '\n')
 
     def search_in_database(self, query_string, dbpath="db"):
+        try:
+            # Open the database for searching.
+            db = xapian.Database(dbpath)
 
-        # Open the database for searching.
-        db = xapian.Database(dbpath)
+            # Start an enquire session.
+            enquire = xapian.Enquire(db)
 
-        # Start an enquire session.
-        enquire = xapian.Enquire(db)
+             # Parse the query string to produce a Xapian::Query object.
+            qp = xapian.QueryParser()
+            stemmer = xapian.Stem("english")
+            qp.set_stemmer(stemmer)
+            qp.set_database(db)
+            qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
+            query = qp.parse_query(query_string)
 
-         # Parse the query string to produce a Xapian::Query object.
-        qp = xapian.QueryParser()
-        stemmer = xapian.Stem("english")
-        qp.set_stemmer(stemmer)
-        qp.set_database(db)
-        qp.set_stemming_strategy(xapian.QueryParser.STEM_SOME)
-        query = qp.parse_query(query_string)
+            # TODO add logs
 
-        # TODO add logs
-
-        # Find the top 10 results for the query.
-        enquire.set_query(query)
-        self.matches = enquire.get_mset(0, 10)
+            # Find the top 10 results for the query.
+            enquire.set_query(query)
+            self.matches = enquire.get_mset(0, 10)
+        except xapian.DatabaseModifiedError:
+            db.reopen()
+            raise

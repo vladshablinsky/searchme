@@ -20,6 +20,12 @@ class MainView:
     def get_file_added(self, filename):
         return filename + " was successfully added<br>" + "<a href = '/'>Go on start page</a>"
 
+    def go_on_startpage(self):
+        return "<a href = '/'>Go on start page</a>"
+
+    def try_again(self):
+        return "Try again<br>" + "<a href = '/'>Go on start page</a>"
+
     def no_file_selected(self):
         html = ""
         html += "<h1>No file selected.</h1>"
@@ -33,7 +39,7 @@ class MainView:
             html += "%i: %i%% docid=%i + %s\n" % (m.rank + 1, m.percent, m.docid, m.document.get_data()) + "<br>"
             absPath = os.path.abspath(m.document.get_value(0))
             html += '<a href="/download/?filepath=' + absPath + '">' + "Get file" + "</a><br/>"
-        return html
+        return html + self.go_on_startpage()
 
     def get_all_querries(self):
         myfile = open("searchlog.txt", "r")

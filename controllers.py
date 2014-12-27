@@ -2,6 +2,7 @@ import cherrypy
 from views import MainView
 from models import SearchModel, UploadModel
 from cherrypy.lib.static import serve_file
+import xapian
 
 
 class Root(object):
@@ -15,7 +16,10 @@ class SearchGenerator(object):
     def index(self, searchquery):
         sm = SearchModel()
         mv = MainView()
-        sm.search_in_database(searchquery)
+        try:
+            sm.search_in_database(searchquery)
+        except xapian.DatabaseModifiedError:
+            return mv.try_again
         return mv.get_search_results(sm.matches)
 
 
