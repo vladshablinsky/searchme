@@ -24,8 +24,11 @@ class Upload(object):
     def index(self, myFile=None):
         um = UploadModel()
         mv = MainView()
-        filename = um.upload_file(myFile)
-        return mv.get_file_added(filename)
+        try:
+            filename = um.upload_file(myFile)
+            return mv.get_file_added(filename)
+        except AttributeError:
+            return mv.no_file_selected()
 
 
 class Download(object):

@@ -18,7 +18,13 @@ class MainView:
         return
 
     def get_file_added(self, filename):
-        return filename + " was successfully added"
+        return filename + " was successfully added<br>" + "<a href = '/'>Go on start page</a>"
+
+    def no_file_selected(self):
+        html = ""
+        html += "<h1>No file selected.</h1>"
+        html += "<a href = '/'>Go on start page</a>"
+        return html
 
     def get_search_results(self, matches):
         html = ""

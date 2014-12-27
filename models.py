@@ -14,7 +14,7 @@ class UploadModel:
         contents = myfile.file.read()
         filename = hashlib.md5(contents).hexdigest() + ".txt"
         filepath = "lib/" + filename[:2] + "/" + filename[2:4] + "/"
-        if not os.path.exists(os.path.dirname(filename)):
+        if not os.path.exists(os.path.dirname(filepath + filename)):
             os.makedirs(os.path.dirname(filepath))
         with open(filepath + filename, "w") as fileout:
             fileout.write(contents)
@@ -34,6 +34,7 @@ class UploadModel:
         idterm = u"Q" + filename
         doc.add_boolean_term(idterm)
         db.replace_document(idterm, doc)
+
         return filename
 
 
