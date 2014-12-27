@@ -25,11 +25,20 @@ def get_app(config=None):
     cherrypy.tree.mount(SearchGenerator(), '/generate', config="config/webapp.cfg")
 
 
-def start():
-    get_app()
-    cherrypy.engine.start()
-    cherrypy.engine.block()
-
-
 if __name__ == '__main__':
-    start()
+    import tornado
+    import tornado.httpserver
+    import tornado.wsgi
+
+    get_app()
+    wsgiapp = cherrypy.tree
+    cherrypy.config.update({'engine.autoreload.on': False})
+    cherrypy.server.unsubscribe()
+    cherrypy.engine.signals.subscribe()
+    cherrypy.log.error_log.propagate = False
+    cherrypy.engine.start()
+    container = tornado.wsgi.WSGIContainer(wsgiapp)
+    http_server = tornado.httpserver.HTTPServer(container)
+    http_server.listen(8080)
+    tornado.ioloop.PeriodicCallback(lambda: cherrypy.engine.publish('main'), 100).start()
+    tornado.ioloop.IOLoop.instance().start()

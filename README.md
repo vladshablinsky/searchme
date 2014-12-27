@@ -7,6 +7,7 @@ Requirements
 * Xapian 1.2.19
 * CherryPy 3.6
 * Python >= 2.4
+* Tornado 4.0.2
 
 Overview
 ========
@@ -16,7 +17,7 @@ Searchme allows you to:
 
 * upload your file on the server
 * search among all uploaded files
-* download a file matchig your query
+* download a file matching your query
 
 Get Started
 ===========
@@ -29,6 +30,10 @@ Get Started
 * Install CherryPy with pip:
 
 `$ sudo pip install cherrypy`
+
+* Install Tornado with pip:
+
+`$ sudo pip install tornado`
 
 * Start the server:
 
